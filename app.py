@@ -145,4 +145,5 @@ def hello_world():
 
 # Run in HTTP
 # When debug = True, code is reloaded on the fly while saved
-app.run(host='0.0.0.0', port='5001', debug=True)
+port = int(os.getenv('PORT'))
+app.run(host='0.0.0.0', port=port, debug=True)
