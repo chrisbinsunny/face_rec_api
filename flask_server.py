@@ -37,8 +37,7 @@ def print_request(request):
         print(body_sub_image_data.decode('utf-8'))
     # print(body_data[0:500] + b'...' + body_data[-500:]) # raw binary
 
-@app.route('/face_rec', methods=['POST', 'GET'])
-def face_recognition():
+
     if request.method == 'POST':
         # Print request url, headers and content
         print_request(request)
