@@ -120,8 +120,13 @@ def face_match():
         license = data['license']
         selfie = data['selfie']
 
-        licenseIm = Image.open(requests.get(license))
-        selfieIm = Image.open(requests.get(selfie))
+        licenseIm = Image.open(requests.get(license, stream=True).raw)
+        selfieIm = Image.open(requests.get(selfie,stream=True).raw)
+
+
+        ret = compare_faces(licenseIm, selfieIm)
+        resp_data = {"match": bool(ret)} # convert ret (numpy._bool) to bool for json.dumps
+        return jsonify(resp_data)
 
 
         # file1 = request.files.get('file1')
