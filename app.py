@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, jsonify
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -135,7 +135,7 @@ def face_match():
             #file2.save( os.path.join(UPLOAD_FOLDER, secure_filename(file2.filename)) )
             ret = compare_faces(licenseIm, selfieIm)
             resp_data = {"match": bool(ret)} # convert ret (numpy._bool) to bool for json.dumps
-            return json.dumps(resp_data)
+            return jsonify(resp_data)
 
     # Return a demo page for GET request
 
