@@ -116,7 +116,7 @@ def face_match():
         #     print('No file part')
         #     return redirect(request.url)
         
-        license = request.json['licence']
+        license = request.json['license']
         selfie = request.json['selfie']
 
         licenseIm = Image.open(requests.get(license, stream=True).raw)
