@@ -119,19 +119,17 @@ def face_match():
         data= request.get_json()
         license = data['license']
         selfie = data['selfie']
-        
-        return data
 
-        licenseIm = Image.open(requests.get(license, stream=True).raw)
-        selfieIm = Image.open(requests.get(selfie, stream=True).raw)
+        licenseIm = Image.open(requests.get(license))
+        selfieIm = Image.open(requests.get(selfie))
 
 
         # file1 = request.files.get('file1')
         # file2 = request.files.get('file2')
         # if user does not select file, browser also submit an empty part without filename
-        if licenseIm.filename == '' or selfieIm.filename == '':
-            print('No selected file')
-            return redirect(request.url)
+        # if licenseIm.filename == '' or selfieIm.filename == '':
+        #     print('No selected file')
+        #     return redirect(request.url)
 
         if allowed_file(licenseIm.filename) and allowed_file(selfieIm.filename):
             #file1.save( os.path.join(UPLOAD_FOLDER, secure_filename(file1.filename)) )
