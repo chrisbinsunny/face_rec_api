@@ -120,8 +120,8 @@ def face_match():
         license = data['license']
         selfie = data['selfie']
 
-        licenseIm = Image.open(requests.get(license, stream=True).raw)
-        selfieIm = Image.open(requests.get(selfie,stream=True).raw)
+        licenseIm = Image.open(BytesIO(requests.get(license).content)).convert("RGB")
+        selfieIm = Image.open(BytesIO(requests.get(selfie).content)).convert("RGB")
 
 
         ret = compare_faces(licenseIm, selfieIm)
