@@ -5,6 +5,9 @@ import json
 from face_util import compare_faces, face_rec, find_facial_features, find_face_locations
 import re
 import base64
+from PIL import Image
+from io import BytesIO
+import requests
 
 app = Flask(__name__)
 
@@ -109,35 +112,32 @@ def print_request(request):
 def face_match():
     if request.method == 'POST':
         # check if the post request has the file part
-        if ('file1' not in request.files) or ('file2' not in request.files):
-            print('No file part')
-            return redirect(request.url)
+        # if ('file1' not in request.files) or ('file2' not in request.files):
+        #     print('No file part')
+        #     return redirect(request.url)
+        
+        license = request.json['licence']
+        selfie = request.json['selfie']
 
-        file1 = request.files.get('file1')
-        file2 = request.files.get('file2')
+        licenseIm = Image.open(requests.get(license, stream=True).raw)
+        selfieIm = Image.open(requests.get(selfie, stream=True).raw)
+
+
+        # file1 = request.files.get('file1')
+        # file2 = request.files.get('file2')
         # if user does not select file, browser also submit an empty part without filename
-        if file1.filename == '' or file2.filename == '':
+        if licenseIm.filename == '' or selfieIm.filename == '':
             print('No selected file')
             return redirect(request.url)
 
-        if allowed_file(file1.filename) and allowed_file(file2.filename):
+        if allowed_file(licenseIm.filename) and allowed_file(selfieIm.filename):
             #file1.save( os.path.join(UPLOAD_FOLDER, secure_filename(file1.filename)) )
             #file2.save( os.path.join(UPLOAD_FOLDER, secure_filename(file2.filename)) )
-            ret = compare_faces(file1, file2)
+            ret = compare_faces(licenseIm, selfieIm)
             resp_data = {"match": bool(ret)} # convert ret (numpy._bool) to bool for json.dumps
             return json.dumps(resp_data)
 
     # Return a demo page for GET request
-    return '''
-    <!doctype html>
-    <title>Face Match</title>
-    <h1>Upload two images</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file1>
-      <input type=file name=file2>
-      <input type=submit value=Upload>
-    </form>
-    '''
 
 @app.route('/')
 def hello_world():
