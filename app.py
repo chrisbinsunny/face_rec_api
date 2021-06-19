@@ -108,7 +108,7 @@ def print_request(request):
     </form>
     '''
 
-@app.route('/face_match', methods=['POST', 'GET'])
+@app.route('/face_match', methods=['POST'])
 def face_match():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -116,8 +116,11 @@ def face_match():
         #     print('No file part')
         #     return redirect(request.url)
         
-        license = request.json['license']
-        selfie = request.json['selfie']
+        data= request.get_json()
+        license = data['license']
+        selfie = data['selfie']
+        
+        return data
 
         licenseIm = Image.open(requests.get(license, stream=True).raw)
         selfieIm = Image.open(requests.get(selfie, stream=True).raw)
